@@ -1,0 +1,159 @@
+# devops-exp-3
+devops-exp-3
+CI Pipeline Lab: Python App → GitHub Actions → Docker Hub
+✅ Step 1 — Create GitHub repo
+
+Open GitHub → New repository → name it python-ci-docker-lab
+
+✅ Step 2 — Open Command Prompt
+
+Press Win + R → type cmd → Enter
+
+✅ Step 3 — Create project folder
+mkdir python-ci-docker-lab
+cd python-ci-docker-lab
+mkdir tests
+mkdir .github
+mkdir .github\workflows
+✅ Step 4 — Create app.py
+notepad app.py
+
+Paste:
+
+def add(a, b):
+    return a + b
+
+if __name__ == "__main__":
+    print("Hello from Python CI Lab!")
+    print("2 + 3 =", add(2, 3))
+
+Save and close.
+
+✅ Step 5 — Create tests\test_app.py
+notepad tests\test_app.py
+
+Paste:
+
+from app import add
+
+def test_add():
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+
+Save and close.
+
+✅ Step 6 — Create requirements.txt
+notepad requirements.txt
+
+Paste:
+
+pytest==8.3.2
+
+Save and close.
+
+✅ Step 7 — Create Dockerfile
+notepad Dockerfile
+
+Paste:
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+
+Save as:
+
+File name: Dockerfile
+Save as type: All Files
+✅ Step 8 — Create workflow file
+notepad .github\workflows\ci-dockerhub.yml
+
+Paste:
+
+name: ci-dockerhub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/python-ci-lab:latest
+
+Save and close.
+
+✅ Step 9 — Push to GitHub
+git init
+git add .
+git commit -m "init lab"
+git branch -M main
+git remote add origin https://github.com/santhosh444-ai/python-ci-docker-lab.git
+git push -u origin main
+✅ Step 10 — Add GitHub secrets
+
+Open GitHub repo → Settings → Secrets and variables → Actions
+
+Add:
+
+DOCKERHUB_USERNAME = your Docker Hub username
+DOCKERHUB_TOKEN = your Docker Hub access token
+
+✅ Step 11 — Check workflow
+
+Open GitHub repo → Actions tab
+
+You should see:
+
+tests running
+docker image building
+image pushing
+✅ Step 12 — Check Docker Hub
+
+Open Docker Hub and see:
+
+python-ci-lab
+
+✅ What is not needed
+
+You can skip:
+
+local docker test
+local python run
+.gitignore
+tag release
+qemu/buildx/manual extras
+✅ What to tell staff
+
+“I created a Python app, added a test file, created a GitHub Actions workflow, stored Docker Hub username and token in GitHub Secrets, then pushed code to GitHub. The workflow automatically ran tests, built the Docker image, and pushed it to Docker Hub.”

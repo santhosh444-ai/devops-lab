@@ -1,0 +1,144 @@
+devops-exp-2
+Flask App Containerization and Docker Hub Deployment
+🎯 Objective
+
+To create a Flask application, containerize it using Docker, run it locally, and push the image to Docker Hub.
+
+✅ Step 1 — Open Docker
+Open Docker Desktop from Start menu
+Wait until Docker is fully running
+
+✔ Check: docker --version
+
+✅ Step 2 — Open Command Prompt
+Press Win + R
+Type cmd
+Press Enter
+
+✅ Step 3 — Create Project Folder
+mkdir flask-docker-app
+cd flask-docker-app
+
+✔ Check: dir
+
+✅ Step 4 — Create app.py
+notepad app.py
+
+Paste:
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Dockerised Flask!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+✔ Save → Close
+
+✔ Check: dir
+
+✅ Step 5 — Create requirements.txt
+notepad requirements.txt
+
+Paste:
+
+flask
+
+✔ Save → Close
+
+✅ Step 6 — Create Dockerfile
+notepad Dockerfile
+
+Paste:
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+⚠ IMPORTANT while saving:
+
+File name: Dockerfile
+Save as type: All Files (.)
+
+✔ Check:
+
+dir
+
+Must show:
+
+app.py
+requirements.txt
+Dockerfile
+✅ Step 7 — Build Docker Image
+docker build -t flask-docker-app .
+
+✔ Check:
+
+docker images
+✅ Step 8 — Run Container
+docker run -p 5000:5000 flask-docker-app
+
+✔ Open browser:
+
+http://localhost:5000
+
+✔ Output:
+
+Hello from Dockerised Flask!
+✅ Step 9 — Stop Container
+
+Press:
+
+Ctrl + C
+✅ Step 10 — Login to Docker Hub
+docker login
+
+✔ Output:
+
+Login Succeeded
+✅ Step 11 — Tag Image
+docker tag flask-docker-app santhosh1170/flask-docker-app:latest
+✅ Step 12 — Push to Docker Hub
+docker push santhosh1170/flask-docker-app:latest
+
+✔ Output:
+Layers pushed successfully
+
+✅ Step 13 — Verify Output
+
+Open:
+
+https://hub.docker.com/r/santhosh1170/flask-docker-app
+
+✔ Check:
+
+Image visible
+Updated time shown
+✅ Expected Output
+Browser shows:
+Hello from Dockerised Flask!
+Docker Hub shows uploaded image
+🎤 Viva Explanation
+Created Flask app
+Created Dockerfile
+Built Docker image
+Ran container and verified output
+Tagged and pushed image to Docker Hub
+🧾 Final Statement
+
+Flask app was successfully containerized using Docker and deployed to Docker Hub.
+
+⚠ Important Note
+
+Always save:
+
+Dockerfile → Save as type = All Files (*.*)
+
+Otherwise it becomes Dockerfile.txt and build fails.

@@ -1,1 +1,47 @@
+# devops-exp-1
+✅ STEP 1 — Create repo (browser)
+Open: https://github.com
+Click + → New repository
+Name: myproject
+Click Create repository
+
+✅ STEP 2 — Open Command Prompt
+
+✅ STEP 3 — Clone repo
+git clone https://github.com/santhosh444-ai/myproject.git
+cd myproject
+
+✅ STEP 4 — Create first file + commit
+echo My DevOps Project > README.md
+git add README.md
+git commit -m "Initial commit"
+git push origin main
+
+✅ STEP 5 — Create feature branch + commit
+git checkout -b feature/hello
+echo Hello > hello.txt
+git add hello.txt
+git commit -m "feat: hello"
+git push -u origin feature/hello
+
+✅ STEP 6 — Create Pull Request (browser)
+Open: https://github.com/santhosh444-ai/myproject
+Click Compare & pull request
+Click Create pull request
+
+✅ STEP 7 — Merge branch
+git checkout main
+git merge feature/hello
+git push origin main
+
+✅ STEP 8 — Show output
+git log --oneline --graph
+
+🔥 FINAL (what you did)
+Initialized repo
+Committed file
+Created branch
+Pushed to GitHub
+Created PR
+Merged branch
 

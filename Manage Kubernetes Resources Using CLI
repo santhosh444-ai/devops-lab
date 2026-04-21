@@ -1,0 +1,75 @@
+devops-exp-6
+Manage Kubernetes Resources Using CLI
+
+✅ Step 1 — Start Kubernetes
+Copy:
+minikube start --driver=dockerkubectl get nodes
+✔ Output:
+Node status: Ready
+👉 Meaning: Kubernetes cluster is running
+
+✅ Step 2 — Create Pod
+Copy:
+notepad nginx-pod.yaml
+Paste:
+apiVersion: v1kind: Podmetadata:  name: nginx-podspec:  containers:  - name: nginx    image: nginx    ports:    - containerPort: 80
+Save as All Files
+Now run:
+kubectl apply -f nginx-pod.yamlkubectl get pods
+✔ Output:
+nginx-pod   Running
+👉 Meaning: Pod created successfully
+
+✅ Step 3 — Access Pod
+Copy:
+kubectl port-forward pod/nginx-pod 8080:80
+Open browser:
+http://localhost:8080
+✔ Output:
+NGINX page
+👉 Meaning: Pod is working
+
+✅ Step 4 — Create Deployment
+Copy:
+kubectl create deployment my-nginx --image=nginxkubectl get deployments
+✔ Output:
+my-nginx   Available
+👉 Meaning: Deployment created
+
+✅ Step 5 — Scale Deployment
+Copy:
+kubectl scale deployment my-nginx --replicas=3kubectl get pods
+✔ Output:
+3 pods running
+👉 Meaning: Scaling worked
+
+✅ Step 6 — Update Deployment
+Copy:
+kubectl set image deployment/my-nginx nginx=nginx:1.25kubectl rollout status deployment/my-nginx
+✔ Output:
+successfully rolled out
+👉 Meaning: Update successful
+
+✅ Step 7 — Expose Service
+Copy:
+kubectl expose deployment my-nginx --type=NodePort --port=80kubectl get svcminikube service my-nginx --url
+Open URL
+✔ Output:
+NGINX page
+👉 Meaning: Service exposed and accessible
+
+✅ Step 8 — Cleanup
+Copy:
+kubectl delete deployment my-nginxkubectl delete pod nginx-podminikube stop
+👉 Meaning: Resources removed
+
+🧾 What I did in this experiment
+In this experiment, I started a Kubernetes cluster using Minikube. I created a Pod using a YAML file and accessed it through the browser. Then I created a Deployment, scaled it to multiple replicas, and updated its image. After that, I exposed the deployment as a service and accessed it using a URL. Finally, I deleted all resources and stopped the cluster.
+
+🎤 Viva line
+I used kubectl CLI to create and manage Pods and Deployments, scaled the application, exposed it as a service, and accessed it using Minikube.
+
+✅ Final statement
+Kubernetes resources were successfully created, scaled, exposed, and cleaned using kubectl CLI.
+
+If you want, I can compress ALL 6 experiments into 1-page cheat sheet for exam 👍
